@@ -3,10 +3,12 @@ const app = express();
 const mongoose = require("mongoose");
 const Listing = require("./models/listing.js"); //listing schema
 const path = require("path");
+const methodOverride = require("method-override");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride("_method"));
 
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
 
@@ -33,8 +35,6 @@ app.get("/listings/new", (req, res) => {
   res.render("listings/new.ejs");
 });
 
-
-
 // 😂 Show Route
 app.get("/listings/:id", async (req, res) => {
   let { id } = req.params;
@@ -44,17 +44,31 @@ app.get("/listings/:id", async (req, res) => {
 
 // 😂 Create Route
 app.post("/listings", (req, res) => {
-    const newListing = new Listing(req.body.listing); //req.body.listing will get all the listing key-value pairs from form where we wrote listing[title],listing[image], etc.
-    newListing
-      .save()
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-      res.redirect("/listings");
-  });
+  const newListing = new Listing(req.body.listing); //req.body.listing will get all the listing key-value pairs from form where we wrote listing[title],listing[image], etc.
+  newListing
+    .save()
+    .then((res) => {
+      console.log("new Listing Added to DB");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  res.redirect("/listings");
+});
+
+// 😂 Edit Route
+app.get("/listings/:id/edit", async (req, res) => {
+  let { id } = req.params;
+  const listing = await Listing.findById(id);
+  res.render("listings/edit.ejs", { listing });
+});
+
+// 😂 Update Route
+app.put("/listings/:id", async (req, res) => {
+  let { id } = req.params;
+  await Listing.findByIdAndUpdate(id, { ...req.body.listing }); //to desconstruct the key-value pairs
+  res.redirect(`/listings/${id}`);
+});
 
 // 😂 Testing the Database
 app.get("/testListing", (req, res) => {
