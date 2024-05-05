@@ -5,7 +5,6 @@
     <!-- <form method="GET" action="/listings/new">
         <button>Create New Listing</button>
     </form> -->
-    <ul>
         <% for(listing of allListings){ %>
             <li><a href="listings/<%=listing._id%>"><%= listing.title%></a></li>
         <% } %>
