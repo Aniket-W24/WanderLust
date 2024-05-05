@@ -93,3 +93,13 @@ body {
     background-color: #fe424d !important;
     border: none !important;
 }
+
+/* Show page */
+.btns {
+    display: flex;
+}
+
+.show-card {
+    padding-left: 0;
+    padding-right: 0;
+}
