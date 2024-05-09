@@ -7,6 +7,7 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync.js"); //for async error handle
 const ExpressError = require("./utils/ExpressError.js"); //custom Error Handling Class
+const {listingSchema} = require("./schema.js");   //for schema validations
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -55,6 +56,11 @@ app.post(
       throw new ExpressError(400, "Send valid data for listing");
     }
     const newListing = new Listing(req.body.listing); //req.body.listing will get all the listing key-value pairs from form where we wrote listing[title],listing[image], etc.
+    let result = listingSchema.validate(req.body);    //schema validation 
+    console.log(result);
+    if(result.error){
+      throw new ExpressError(400, result.error);
+    }
     await newListing.save();
     res.redirect("/listings");
   })
@@ -73,6 +79,11 @@ app.put("/listings/:id", wrapAsync(async (req, res) => {
     throw new ExpressError(400, "Send valid data for listing");
   }
   let { id } = req.params;
+    let result = listingSchema.validate(req.body);    //schema validation 
+    console.log(result);
+    if(result.error){
+      throw new ExpressError(400, result.error);
+    }
   await Listing.findByIdAndUpdate(id, { ...req.body.listing }); //to desconstruct the key-value pairs
   res.redirect(`/listings/${id}`);
 }));
