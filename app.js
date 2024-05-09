@@ -10,7 +10,7 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
-app.engine("ejs", ejsMate);   //to include ejsMate for boilerPlate
+app.engine("ejs", ejsMate); //to include ejsMate for boilerPlate
 app.use(express.static(path.join(__dirname, "/public")));
 
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
@@ -46,17 +46,14 @@ app.get("/listings/:id", async (req, res) => {
 });
 
 // 😂 Create Route
-app.post("/listings", (req, res) => {
-  const newListing = new Listing(req.body.listing); //req.body.listing will get all the listing key-value pairs from form where we wrote listing[title],listing[image], etc.
-  newListing
-    .save()
-    .then((res) => {
-      console.log("new Listing Added to DB");
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  res.redirect("/listings");
+app.post("/listings", async (req, res, next) => {
+  try {
+    const newListing = new Listing(req.body.listing); //req.body.listing will get all the listing key-value pairs from form where we wrote listing[title],listing[image], etc.
+    await newListing.save();
+    res.redirect("/listings");
+  } catch (err) {
+    next(err);
+  }
 });
 
 // 😂 Edit Route
@@ -74,12 +71,12 @@ app.put("/listings/:id", async (req, res) => {
 });
 
 // 😂 Delete Route
-app.delete("/listings/:id", async(req,res)=> {
-    let {id} = req.params;
-    let deletedListing = await Listing.findByIdAndDelete(id);
-    console.log(deletedListing);
-    res.redirect("/listings");
-})
+app.delete("/listings/:id", async (req, res) => {
+  let { id } = req.params;
+  let deletedListing = await Listing.findByIdAndDelete(id);
+  console.log(deletedListing);
+  res.redirect("/listings");
+});
 
 // 😂 Testing the Database
 app.get("/testListing", (req, res) => {
@@ -103,6 +100,11 @@ app.get("/testListing", (req, res) => {
 
 app.get("/", (req, res) => {
   res.send("Hi, I am root");
+});
+
+app.use((err, req, res, next) => {
+  //middleware to handle error
+  res.send("Something Went Wrong !");
 });
 
 const port = 8080;
