@@ -5,6 +5,7 @@ const Listing = require("./models/listing.js"); //listing schema
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
+const wrapAsync = require("./utils/wrapAsync.js");  //for async error handle
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
