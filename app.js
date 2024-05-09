@@ -116,7 +116,8 @@ app.get("*", (req, res, next)=> {
 app.use((err, req, res, next) => {
   //middleware to handle error
   let {statusCode=500, message} = err;
-  res.status(statusCode).send(message);
+  // res.status(statusCode).send(message);
+  res.status(statusCode).render("error.ejs", {message});
 });
 
 const port = 8080;
