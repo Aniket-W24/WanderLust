@@ -54,7 +54,7 @@ app.get(
   })
 );
 
-const validateListing = (req, res, nexx) => {     //middleware to check for validation
+const validateListing = (req, res, next) => {     //middleware to check for validation
   let { error } = listingSchema.validate(req.body);
   if(error){
     let errMsg = error.details.map((el)=> el.message).join(",");    //join multiple details of message
