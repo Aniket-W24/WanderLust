@@ -7,7 +7,8 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync.js"); //for async error handle
 const ExpressError = require("./utils/ExpressError.js"); //custom Error Handling Class
-const { listingSchema } = require("./schema.js"); //for schema validations
+const { listingSchema, reviewSchema } = require("./schema.js"); //for schema validations
+const Review = require("./models/review.js"); //Review Model
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -49,24 +50,37 @@ app.get(
   "/listings/:id",
   wrapAsync(async (req, res) => {
     let { id } = req.params;
-    const listing = await Listing.findById(id);
+    const listing = await Listing.findById(id).populate("reviews"); //to populate the reivews data instead of just id's
     res.render("listings/show.ejs", { listing });
   })
 );
 
-const validateListing = (req, res, next) => {     //middleware to check for validation
+const validateListing = (req, res, next) => {
+  //middleware to check for validation
   let { error } = listingSchema.validate(req.body);
-  if(error){
-    let errMsg = error.details.map((el)=> el.message).join(",");    //join multiple details of message
+  if (error) {
+    let errMsg = error.details.map((el) => el.message).join(","); //join multiple details of message
     throw new ExpressError(400, errMsg);
   } else {
     next();
   }
-}
+};
+
+const validateReview = (req, res, next) => {
+  //middleware to check for validation
+  let { error } = reviewSchema.validate(req.body);
+  if (error) {
+    let errMsg = error.details.map((el) => el.message).join(","); //join multiple details of message
+    throw new ExpressError(400, errMsg);
+  } else {
+    next();
+  }
+};
 
 // 😂 Create Route
 app.post(
-  "/listings", validateListing,   
+  "/listings",
+  validateListing,
   wrapAsync(async (req, res, next) => {
     const newListing = new Listing(req.body.listing); //req.body.listing will get all the listing key-value pairs from form where we wrote listing[title],listing[image], etc.
     await newListing.save();
@@ -86,7 +100,8 @@ app.get(
 
 // 😂 Update Route
 app.put(
-  "/listings/:id", validateListing, 
+  "/listings/:id",
+  validateListing,
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     await Listing.findByIdAndUpdate(id, { ...req.body.listing }); //to desconstruct the key-value pairs
@@ -102,6 +117,23 @@ app.delete(
     let deletedListing = await Listing.findByIdAndDelete(id);
     console.log(deletedListing);
     res.redirect("/listings");
+  })
+);
+
+// 😂 Reviews Post Route
+app.post(
+  "/listings/:id/reviews",
+  validateReview,
+  wrapAsync(async (req, res) => {
+    let listing = await Listing.findById(req.params.id);
+    let newReview = new Review(req.body.review); //making review details
+
+    listing.reviews.push(newReview);
+
+    await newReview.save();
+    await listing.save();
+
+    res.redirect(`/listings/${listing._id}`);
   })
 );
 
