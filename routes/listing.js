@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router(); //using Router to separate routes.
-const { listingSchema, reviewSchema } = require("../schema.js"); //for schema validations
+const { listingSchema } = require("../schema.js"); //for schema validations
 const wrapAsync = require("../utils/wrapAsync.js"); //for async error handle
 const ExpressError = require("../utils/ExpressError.js"); //custom Error Handling Class
 const Listing = require("../models/listing.js"); //listing schema
