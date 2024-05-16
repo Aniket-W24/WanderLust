@@ -10,6 +10,9 @@ const ExpressError = require("./utils/ExpressError.js"); //custom Error Handling
 const { listingSchema, reviewSchema } = require("./schema.js"); //for schema validations
 const Review = require("./models/review.js"); //Review Model
 
+const listings = require("./routes/listing.js");  //requiring the listings.js file as it contains all the /listings routes
+const reviews = require("./routes/review.js");  //review routes 
+
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
@@ -29,124 +32,13 @@ main()
 async function main() {
   await mongoose.connect(MONGO_URL);
 }
-// 😂 Index Route
-app.get(
-  "/listings",
-  wrapAsync(async (req, res) => {
-    const allListings = await Listing.find({}); //find all listings
-    res.render("listings/index.ejs", { allListings });
-    // res.send("get listings is workign");
-  })
-);
 
-// 😂 New Route
-app.get("/listings/new", (req, res) => {
-  //this route should be before show route else it will search for new as searching for id in db
-  res.render("listings/new.ejs");
-});
 
-// 😂 Show Route
-app.get(
-  "/listings/:id",
-  wrapAsync(async (req, res) => {
-    let { id } = req.params;
-    const listing = await Listing.findById(id).populate("reviews"); //to populate the reivews data instead of just id's
-    res.render("listings/show.ejs", { listing });
-  })
-);
+app.use("/listings", listings);     //any route that has /listings will be in listings
+app.use("/listings/:id/reviews", reviews);  //any route that has this path will be redirected to reviews
 
-const validateListing = (req, res, next) => {
-  //middleware to check for validation
-  let { error } = listingSchema.validate(req.body);
-  if (error) {
-    let errMsg = error.details.map((el) => el.message).join(","); //join multiple details of message
-    throw new ExpressError(400, errMsg);
-  } else {
-    next();
-  }
-};
 
-const validateReview = (req, res, next) => {
-  //middleware to check for validation
-  let { error } = reviewSchema.validate(req.body);
-  if (error) {
-    let errMsg = error.details.map((el) => el.message).join(","); //join multiple details of message
-    throw new ExpressError(400, errMsg);
-  } else {
-    next();
-  }
-};
 
-// 😂 Create Route
-app.post(
-  "/listings",
-  validateListing,
-  wrapAsync(async (req, res, next) => {
-    const newListing = new Listing(req.body.listing); //req.body.listing will get all the listing key-value pairs from form where we wrote listing[title],listing[image], etc.
-    await newListing.save();
-    res.redirect("/listings");
-  })
-);
-
-// 😂 Edit Route
-app.get(
-  "/listings/:id/edit",
-  wrapAsync(async (req, res) => {
-    let { id } = req.params;
-    const listing = await Listing.findById(id);
-    res.render("listings/edit.ejs", { listing });
-  })
-);
-
-// 😂 Update Route
-app.put(
-  "/listings/:id",
-  validateListing,
-  wrapAsync(async (req, res) => {
-    let { id } = req.params;
-    await Listing.findByIdAndUpdate(id, { ...req.body.listing }); //to desconstruct the key-value pairs
-    res.redirect(`/listings/${id}`);
-  })
-);
-
-// 😂 Delete Route
-app.delete(
-  "/listings/:id",
-  wrapAsync(async (req, res) => {
-    let { id } = req.params;
-    let deletedListing = await Listing.findByIdAndDelete(id);
-    console.log(deletedListing);
-    res.redirect("/listings");
-  })
-);
-
-// 😂 Reviews Post Route
-app.post(
-  "/listings/:id/reviews",
-  validateReview,
-  wrapAsync(async (req, res) => {
-    let listing = await Listing.findById(req.params.id);
-    let newReview = new Review(req.body.review); //making review details
-
-    listing.reviews.push(newReview);
-
-    await newReview.save();
-    await listing.save();
-
-    res.redirect(`/listings/${listing._id}`);
-  })
-);
-
-// 😂 Reviews Delete Route
-app.delete(
-  "/listings/:id/reviews/:reviewId",
-  wrapAsync(async (req, res) => {
-    let { id, reviewId } = req.params;
-    await Listing.findByIdAndUpdate(id, { $pull: { reviews: reviewId } }); //removes the matching reviewId from array
-    await Review.findByIdAndDelete(reviewId);
-    res.redirect(`/listings/${id}`);
-  })
-);
 
 // 😂 Testing the Database
 app.get("/testListing", (req, res) => {
