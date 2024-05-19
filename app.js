@@ -6,6 +6,7 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js"); //custom Error Handling Class
 const session = require("express-session"); //to make session id's and store associated info
+const flash = require("connect-flash");   //to show flashes(messages that appear only once like new listing created)
 
 const listings = require("./routes/listing.js"); //requiring the listings.js file as it contains all the /listings routes
 const reviews = require("./routes/review.js"); //review routes
@@ -30,8 +31,9 @@ async function main() {
   await mongoose.connect(MONGO_URL);
 }
 
-app.use("/listings", listings); //any route that has /listings will be in listings
-app.use("/listings/:id/reviews", reviews); //any route that has this path will be redirected to reviews
+app.get("/", (req, res) => {
+  res.send("Hi, I am root");
+});
 
 const sessionOptions = {
   secret: "mysupersecretcode", //make it a difficult string like path variables
@@ -45,10 +47,21 @@ const sessionOptions = {
 };
 
 app.use(session(sessionOptions)); //to use session -> for creating and using session id's for multiple pages
+app.use(flash());     //to show flash messages on pages
 
-app.get("/", (req, res) => {
-  res.send("Hi, I am root");
-});
+app.use((req, res, next)=> {      //flash middleware
+  res.locals.success = req.flash("success");
+  next();
+})
+
+app.use("/listings", listings); //any route that has /listings will be in listings
+app.use("/listings/:id/reviews", reviews); //any route that has this path will be redirected to reviews
+
+
+
+
+
+
 
 app.all("*", (req, res, next) => {
   next(new ExpressError(404, "Page Not Found!")); //for routes that don't exists

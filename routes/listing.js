@@ -49,6 +49,7 @@ router.post(
   wrapAsync(async (req, res, next) => {
     const newListing = new Listing(req.body.listing); //req.body.listing will get all the listing key-value pairs from form where we wrote listing[title],listing[image], etc.
     await newListing.save();
+    req.flash("success", "New Listing Created")
     res.redirect("/listings");
   })
 );
