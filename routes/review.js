@@ -6,6 +6,7 @@ const ExpressError = require("../utils/ExpressError.js"); //custom Error Handlin
 const Listing = require("../models/listing.js"); //listing schema
 const Review = require("../models/review.js"); //Review Model
 
+
 const validateReview = (req, res, next) => {
     //middleware to check for validation
     let { error } = reviewSchema.validate(req.body);
@@ -16,6 +17,8 @@ const validateReview = (req, res, next) => {
       next();
     }
   };
+
+
 
 
 // 😂 Reviews Post Route
@@ -30,7 +33,8 @@ router.post(
   
       await newReview.save();
       await listing.save();
-  
+      
+      req.flash("success", "Review Posted");
       res.redirect(`/listings/${listing._id}`);
     })
   );
@@ -42,6 +46,7 @@ router.post(
       let { id, reviewId } = req.params;
       await Listing.findByIdAndUpdate(id, { $pull: { reviews: reviewId } }); //removes the matching reviewId from array
       await Review.findByIdAndDelete(reviewId);
+      req.flash("success", "Review Deleted");
       res.redirect(`/listings/${id}`);
     })
   );

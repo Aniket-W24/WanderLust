@@ -6,15 +6,15 @@ const ExpressError = require("../utils/ExpressError.js"); //custom Error Handlin
 const Listing = require("../models/listing.js"); //listing schema
 
 const validateListing = (req, res, next) => {
-    //middleware to check for validation
-    let { error } = listingSchema.validate(req.body);
-    if (error) {
-      let errMsg = error.details.map((el) => el.message).join(","); //join multiple details of message
-      throw new ExpressError(400, errMsg);
-    } else {
-      next();
-    }
-  };
+  //middleware to check for validation
+  let { error } = listingSchema.validate(req.body);
+  if (error) {
+    let errMsg = error.details.map((el) => el.message).join(","); //join multiple details of message
+    throw new ExpressError(400, errMsg);
+  } else {
+    next();
+  }
+};
 
 // 😂 Index Route
 router.get(
@@ -49,7 +49,7 @@ router.post(
   wrapAsync(async (req, res, next) => {
     const newListing = new Listing(req.body.listing); //req.body.listing will get all the listing key-value pairs from form where we wrote listing[title],listing[image], etc.
     await newListing.save();
-    req.flash("success", "New Listing Created")
+    req.flash("success", "New Listing Created");
     res.redirect("/listings");
   })
 );
@@ -71,6 +71,7 @@ router.put(
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     await Listing.findByIdAndUpdate(id, { ...req.body.listing }); //to desconstruct the key-value pairs
+    req.flash("success", "Listing Updated");
     res.redirect(`/listings/${id}`);
   })
 );
@@ -82,6 +83,7 @@ router.delete(
     let { id } = req.params;
     let deletedListing = await Listing.findByIdAndDelete(id);
     console.log(deletedListing);
+    req.flash("success", "Listing Deleted");
     res.redirect("/listings");
   })
 );

@@ -24,7 +24,9 @@
     <%- include("../includes/navbar.ejs") %>     
     <!-- includes the navbar -->
 
-    <div class="container"><%- body %></div>        
+    <div class="container">
+      <%- include("../includes/flash.ejs") %>  
+      <%- body %></div>        
     <!-- for body to remain same for all pages -->
 
     <%- include("../includes/footer.ejs") %>
