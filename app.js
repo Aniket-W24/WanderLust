@@ -51,6 +51,7 @@ app.use(flash());     //to show flash messages on pages
 
 app.use((req, res, next)=> {      //flash middleware
   res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
   next();
 })
 
