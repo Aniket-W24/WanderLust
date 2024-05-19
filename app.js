@@ -5,9 +5,10 @@ const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js"); //custom Error Handling Class
+const session = require("express-session"); //to make session id's and store associated info
 
-const listings = require("./routes/listing.js");  //requiring the listings.js file as it contains all the /listings routes
-const reviews = require("./routes/review.js");  //review routes 
+const listings = require("./routes/listing.js"); //requiring the listings.js file as it contains all the /listings routes
+const reviews = require("./routes/review.js"); //review routes
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -29,10 +30,16 @@ async function main() {
   await mongoose.connect(MONGO_URL);
 }
 
+app.use("/listings", listings); //any route that has /listings will be in listings
+app.use("/listings/:id/reviews", reviews); //any route that has this path will be redirected to reviews
 
-app.use("/listings", listings);     //any route that has /listings will be in listings
-app.use("/listings/:id/reviews", reviews);  //any route that has this path will be redirected to reviews
+const sessionOptions = {    
+  secret: "mysupersecretcode", //make it a difficult string like path variables
+  resave: false,
+  saveUninitialized: true,
+};
 
+app.use(session(sessionOptions));     //to use session -> for creating and using session id's for multiple pages
 
 app.get("/", (req, res) => {
   res.send("Hi, I am root");
