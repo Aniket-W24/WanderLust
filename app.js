@@ -33,13 +33,18 @@ async function main() {
 app.use("/listings", listings); //any route that has /listings will be in listings
 app.use("/listings/:id/reviews", reviews); //any route that has this path will be redirected to reviews
 
-const sessionOptions = {    
+const sessionOptions = {
   secret: "mysupersecretcode", //make it a difficult string like path variables
   resave: false,
   saveUninitialized: true,
+  cookie: {
+    // expires: Date.now() + 7 * 24 * 60 * 60 * 1000, //7 days in milliseconds
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+    httpOnly: true, //for security
+  },
 };
 
-app.use(session(sessionOptions));     //to use session -> for creating and using session id's for multiple pages
+app.use(session(sessionOptions)); //to use session -> for creating and using session id's for multiple pages
 
 app.get("/", (req, res) => {
   res.send("Hi, I am root");
