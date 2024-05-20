@@ -59,6 +59,15 @@ passport.use(new LocalStratergy(User.authenticate())); //authenticate method to 
 passport.serializeUser(User.serializeUser());   //to store in session
 passport.deserializeUser(User.deserializeUser());     //to remove when session ends
 
+app.get("/registerUser", async(req, res)=> {
+  let fakeUser = new User({
+    email : "student@gmail.com",
+    username : "delta-student",     //passport will check for whether username is unique or not
+  })
+
+  let newUser = await User.register(fakeUser, "helloWorld");    //automatically adds salt & hasing to the given password
+  res.send(newUser);
+})
 
 app.use((req, res, next) => {
   //flash middleware
