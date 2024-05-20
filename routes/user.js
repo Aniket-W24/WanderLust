@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router(); //using Router to separate routes.
 const User = require("../models/user.js");
 const wrapAsync = require("../utils/wrapAsync");
+const passport = require("passport");
 
 router.get("/signup", (req, res) => {
   res.render("users/signup.ejs");
@@ -24,5 +25,22 @@ router.post(
     }
   })
 );
+
+router.get("/login", (req, res) => {
+  res.render("users/login.ejs");
+});
+
+router.post(
+  "/login",
+  passport.authenticate("local", {
+    failureRedirect: "/login",
+    failureFlash: true,
+  }),
+  async (req, res) => {
+    req.flash("success", "Welcome back to wanderlust! You are Logged in");
+    res.redirect("/listings");
+  }
+);
+//check for username -> Hulk, password -> hello
 
 module.exports = router;
