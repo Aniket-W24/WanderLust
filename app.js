@@ -11,8 +11,9 @@ const passport = require("passport"); //for authentication
 const LocalStratergy = require("passport-local"); //local stratergy i.e username & password
 const User = require("./models/user.js"); //user model
 
-const listings = require("./routes/listing.js"); //requiring the listings.js file as it contains all the /listings routes
-const reviews = require("./routes/review.js"); //review routes
+const listingRouter = require("./routes/listing.js"); //requiring the listings.js file as it contains all the /listings routes
+const reviewRouter = require("./routes/review.js"); //review routes
+const userRouter = require("./routes/user.js"); //user routes
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -56,18 +57,18 @@ app.use(passport.initialize()); //middleware that initialize passport
 app.use(passport.session()); //as passport uses session for diff pages
 passport.use(new LocalStratergy(User.authenticate())); //authenticate method to authenticate user
 
-passport.serializeUser(User.serializeUser());   //to store in session
-passport.deserializeUser(User.deserializeUser());     //to remove when session ends
+passport.serializeUser(User.serializeUser()); //to store in session
+passport.deserializeUser(User.deserializeUser()); //to remove when session ends
 
-app.get("/registerUser", async(req, res)=> {
+app.get("/registerUser", async (req, res) => {
   let fakeUser = new User({
-    email : "student@gmail.com",
-    username : "delta-student",     //passport will check for whether username is unique or not
-  })
+    email: "student@gmail.com",
+    username: "delta-student", //passport will check for whether username is unique or not
+  });
 
-  let newUser = await User.register(fakeUser, "helloWorld");    //automatically adds salt & hasing to the given password
+  let newUser = await User.register(fakeUser, "helloWorld"); //automatically adds salt & hasing to the given password
   res.send(newUser);
-})
+});
 
 app.use((req, res, next) => {
   //flash middleware
@@ -76,8 +77,9 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/listings", listings); //any route that has /listings will be in listings
-app.use("/listings/:id/reviews", reviews); //any route that has this path will be redirected to reviews
+app.use("/listings", listingRouter); //any route that has /listings will be in listings
+app.use("/listings/:id/reviews", reviewRouter); //any route that has this path will be redirected to reviews
+app.use("/", userRouter); //any route that belongs to user signup
 
 app.all("*", (req, res, next) => {
   next(new ExpressError(404, "Page Not Found!")); //for routes that don't exists
