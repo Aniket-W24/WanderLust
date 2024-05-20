@@ -6,7 +6,10 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js"); //custom Error Handling Class
 const session = require("express-session"); //to make session id's and store associated info
-const flash = require("connect-flash");   //to show flashes(messages that appear only once like new listing created)
+const flash = require("connect-flash"); //to show flashes(messages that appear only once like new listing created)
+const passport = require("passport"); //for authentication
+const LocalStratergy = require("passport-local"); //local stratergy i.e username & password
+const User = require("./models/user.js"); //user model
 
 const listings = require("./routes/listing.js"); //requiring the listings.js file as it contains all the /listings routes
 const reviews = require("./routes/review.js"); //review routes
@@ -47,22 +50,25 @@ const sessionOptions = {
 };
 
 app.use(session(sessionOptions)); //to use session -> for creating and using session id's for multiple pages
-app.use(flash());     //to show flash messages on pages
+app.use(flash()); //to show flash messages on pages
 
-app.use((req, res, next)=> {      //flash middleware
+app.use(passport.initialize()); //middleware that initialize passport
+app.use(passport.session()); //as passport uses session for diff pages
+passport.use(new LocalStratergy(User.authenticate())); //authenticate method to authenticate user
+
+passport.serializeUser(User.serializeUser());   //to store in session
+passport.deserializeUser(User.deserializeUser());     //to remove when session ends
+
+
+app.use((req, res, next) => {
+  //flash middleware
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
   next();
-})
+});
 
 app.use("/listings", listings); //any route that has /listings will be in listings
 app.use("/listings/:id/reviews", reviews); //any route that has this path will be redirected to reviews
-
-
-
-
-
-
 
 app.all("*", (req, res, next) => {
   next(new ExpressError(404, "Page Not Found!")); //for routes that don't exists
