@@ -43,4 +43,15 @@ router.post(
 );
 //check for username -> Hulk, password -> hello
 
+//for logout
+router.get("/logout", (req, res, next)=> {
+  req.logout((err)=> {    //passport provides logout method
+    if(err){
+      return next();
+    }
+    req.flash("success", "logged you out")
+    res.redirect("/listings");
+  })
+})
+
 module.exports = router;
