@@ -17,8 +17,14 @@ router.post(
       const newUser = new User({ email, username });
       let result = await User.register(newUser, password);
       console.log(result);
-      req.flash("success", "Welcome to Wanderlust");
-      res.redirect("/listings");
+      req.login(newUser, (err) => {
+        //to directly login after signup
+        if (err) {
+          return next(err);
+        }
+        req.flash("success", "Welcome to Wanderlust");
+        res.redirect("/listings");
+      });
     } catch (er) {
       req.flash("error", "Username already exists");
       res.redirect("/signup");
@@ -44,14 +50,15 @@ router.post(
 //check for username -> Hulk, password -> hello
 
 //for logout
-router.get("/logout", (req, res, next)=> {
-  req.logout((err)=> {    //passport provides logout method
-    if(err){
+router.get("/logout", (req, res, next) => {
+  req.logout((err) => {
+    //passport provides logout method
+    if (err) {
       return next();
     }
-    req.flash("success", "Logged you out")
+    req.flash("success", "Logged you out");
     res.redirect("/listings");
-  })
-})
+  });
+});
 
 module.exports = router;
