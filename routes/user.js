@@ -3,7 +3,7 @@ const router = express.Router(); //using Router to separate routes.
 const User = require("../models/user.js");
 const wrapAsync = require("../utils/wrapAsync");
 const passport = require("passport");
-const { saveRedirectUrl } = require("../middleware.js");
+const { saveRedirectUrl } = require("../middlewares/user.js");
 
 router.get("/signup", (req, res) => {
   res.render("users/signup.ejs");
