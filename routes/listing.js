@@ -4,6 +4,7 @@ const { listingSchema } = require("../schema.js"); //for schema validations
 const wrapAsync = require("../utils/wrapAsync.js"); //for async error handle
 const ExpressError = require("../utils/ExpressError.js"); //custom Error Handling Class
 const Listing = require("../models/listing.js"); //listing schema
+const {isLoggedIn} = require("../middleware.js");
 
 const validateListing = (req, res, next) => {
   //middleware to check for validation
@@ -27,8 +28,9 @@ router.get(
 );
 
 // 😂 New Route
-router.get("/new", (req, res) => {
+router.get("/new", isLoggedIn, (req, res) => {
   //this route should be before show route else it will search for new as searching for id in db
+  
   res.render("listings/new.ejs");
 });
 
@@ -49,6 +51,7 @@ router.get(
 // 😂 Create Route
 router.post(
   "/",
+  isLoggedIn,
   validateListing,
   wrapAsync(async (req, res, next) => {
     const newListing = new Listing(req.body.listing); //req.body.listing will get all the listing key-value pairs from form where we wrote listing[title],listing[image], etc.
@@ -61,6 +64,7 @@ router.post(
 // 😂 Edit Route
 router.get(
   "/:id/edit",
+  isLoggedIn,
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     const listing = await Listing.findById(id);
@@ -75,6 +79,7 @@ router.get(
 // 😂 Update Route
 router.put(
   "/:id",
+  isLoggedIn,
   validateListing,
   wrapAsync(async (req, res) => {
     let { id } = req.params;
@@ -87,6 +92,7 @@ router.put(
 // 😂 Delete Route
 router.delete(
   "/:id",
+  isLoggedIn,
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     let deletedListing = await Listing.findByIdAndDelete(id);
