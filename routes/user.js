@@ -49,7 +49,7 @@ router.get("/logout", (req, res, next)=> {
     if(err){
       return next();
     }
-    req.flash("success", "logged you out")
+    req.flash("success", "Logged you out")
     res.redirect("/listings");
   })
 })

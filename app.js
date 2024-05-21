@@ -60,6 +60,15 @@ passport.use(new LocalStratergy(User.authenticate())); //authenticate method to 
 passport.serializeUser(User.serializeUser()); //to store in session
 passport.deserializeUser(User.deserializeUser()); //to remove when session ends
 
+app.use((req, res, next) => {
+  //flash middleware
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+  res.locals.currUser = req.user; //to pass to ejs page which will check if user is logged in or not as
+  // req.user -> undefined if not logged in and have obj if logged in
+  next();
+});
+
 app.get("/registerUser", async (req, res) => {
   let fakeUser = new User({
     email: "student@gmail.com",
@@ -68,13 +77,6 @@ app.get("/registerUser", async (req, res) => {
 
   let newUser = await User.register(fakeUser, "helloWorld"); //automatically adds salt & hasing to the given password
   res.send(newUser);
-});
-
-app.use((req, res, next) => {
-  //flash middleware
-  res.locals.success = req.flash("success");
-  res.locals.error = req.flash("error");
-  next();
 });
 
 app.use("/listings", listingRouter); //any route that has /listings will be in listings
