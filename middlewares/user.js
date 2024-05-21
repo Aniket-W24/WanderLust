@@ -1,5 +1,4 @@
 const Listing = require("../models/listing.js");
-const wrapAsync = require("../utils/wrapAsync.js"); //for async error handle
 const ExpressError = require("../utils/ExpressError.js"); //custom Error Handling Class
 const {listingSchema} = require("../schema.js");
 

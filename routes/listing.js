@@ -2,7 +2,11 @@ const express = require("express");
 const router = express.Router(); //using Router to separate routes.
 const wrapAsync = require("../utils/wrapAsync.js"); //for async error handle
 const Listing = require("../models/listing.js"); //listing schema
-const { isLoggedIn, isOwner, validateListing } = require("../middlewares/user.js");
+const {
+  isLoggedIn,
+  isOwner,
+  validateListing,
+} = require("../middlewares/user.js");
 
 // 😂 Index Route
 router.get(
@@ -26,7 +30,12 @@ router.get(
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     const listing = await Listing.findById(id)
-      .populate("reviews")
+      .populate({
+        path: "reviews",
+        populate: {
+          path: "author",
+        },
+      })
       .populate("owner"); //to populate the reivews data instead of just id's
     if (!listing) {
       req.flash("error", "Listing you requested for does not exist");
