@@ -3,6 +3,7 @@ const router = express.Router(); //using Router to separate routes.
 const User = require("../models/user.js");
 const wrapAsync = require("../utils/wrapAsync");
 const passport = require("passport");
+const { saveRedirectUrl } = require("../middleware.js");
 
 router.get("/signup", (req, res) => {
   res.render("users/signup.ejs");
@@ -38,13 +39,16 @@ router.get("/login", (req, res) => {
 
 router.post(
   "/login",
+  saveRedirectUrl,    //middleware to save path from where request came from
   passport.authenticate("local", {
     failureRedirect: "/login",
     failureFlash: true,
   }),
   async (req, res) => {
     req.flash("success", "Welcome back to wanderlust! You are Logged in");
-    res.redirect("/listings");
+    let redirectUrl = res.locals.redirectUrl || "/listings";;   //we saved in middleware
+    // console.log(redirectUrl);
+    res.redirect(redirectUrl);
   }
 );
 //check for username -> Hulk, password -> hello
