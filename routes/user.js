@@ -51,7 +51,7 @@ router.post(
     res.redirect(redirectUrl);
   }
 );
-//check for username -> Hulk, password -> hello
+//check for username -> Tony, password -> jarvis
 
 //for logout
 router.get("/logout", (req, res, next) => {

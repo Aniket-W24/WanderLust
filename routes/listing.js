@@ -30,7 +30,6 @@ router.get(
 // 😂 New Route
 router.get("/new", isLoggedIn, (req, res) => {
   //this route should be before show route else it will search for new as searching for id in db
-  
   res.render("listings/new.ejs");
 });
 
@@ -39,7 +38,7 @@ router.get(
   "/:id",
   wrapAsync(async (req, res) => {
     let { id } = req.params;
-    const listing = await Listing.findById(id).populate("reviews"); //to populate the reivews data instead of just id's
+    const listing = await Listing.findById(id).populate("reviews").populate("owner"); //to populate the reivews data instead of just id's
     if(!listing){
       req.flash("error", "Listing you requested for does not exist");
       res.redirect("/listings");
@@ -55,6 +54,7 @@ router.post(
   validateListing,
   wrapAsync(async (req, res, next) => {
     const newListing = new Listing(req.body.listing); //req.body.listing will get all the listing key-value pairs from form where we wrote listing[title],listing[image], etc.
+    newListing.owner = req.user._id;   //to add owner
     await newListing.save();
     req.flash("success", "New Listing Created");
     res.redirect("/listings");
