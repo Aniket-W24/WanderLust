@@ -15,12 +15,17 @@
                 </div>
         </div>
     </div>
+
+    <!-- checking if user who created the listings only sees these button -->
+    <% if(currUser && currUser._id.equals(listing.owner._id)) {%>  
     <div class="btns mb-3">
         <a href="/listings/<%=listing._id%>/edit" class="btn btn-dark edit-btn col-1 offset-3">Edit</a>
         <form method="POST" action="/listings/<%= listing._id%>?_method=DELETE">
             <button class="btn btn-dark offset-4">Delete</button>
         </form>            
     </div>
+    <% } %>
+    
 
     <div class="col-8 offset-3 mb-5">
         <hr>
