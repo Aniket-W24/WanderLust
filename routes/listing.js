@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router(); //using Router to separate routes.
 const wrapAsync = require("../utils/wrapAsync.js"); //for async error handle
-const multer = require("multer");   //for file uploads
-const {storage} = require("../cloudinaryConfig.js");
-const upload = multer({storage})   //destination where file will be saved
+const multer = require("multer"); //for file uploads
+const { storage } = require("../cloudinaryConfig.js");
+const upload = multer({ storage }); //destination where file will be saved
 
 const {
   isLoggedIn,
@@ -15,17 +15,12 @@ const listingController = require("../controllers/listings.js");
 router
   .route("/")
   .get(wrapAsync(listingController.index)) // 😂 Index Route
-  // .post(
-  //   // 😂 Create Route
-  //   isLoggedIn,
-  //   validateListing,
-  //   wrapAsync(listingController.createListing)
-  // )
-  .post(upload.single('listing[image][url]'),
-    (req, res)=> {
-      console.log(req.file);
-      res.send(req.file);
-    }
+  .post(
+    // 😂 Create Route
+    isLoggedIn,
+    upload.single("listing[image]"),    //for uploading image
+    validateListing,
+    wrapAsync(listingController.createListing)
   );
 
 // 😂 New Route
