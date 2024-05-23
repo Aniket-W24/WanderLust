@@ -4,6 +4,7 @@ module.exports.renderSignupForm = (req, res) => {
   res.render("users/signup.ejs");
 };
 
+//using try-catch to remain on same page if usernmae exists
 module.exports.signup = async (req, res) => {
   try {
     let { email, username, password } = req.body;
