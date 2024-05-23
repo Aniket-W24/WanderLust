@@ -1,3 +1,8 @@
+if(process.env.NODE_ENV != "production"){   //only access if not in production phase
+  require("dotenv").config();   //for accessing environment variables
+}
+// console.log(process.env.CLOUD_NAME);  
+
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -10,6 +15,7 @@ const flash = require("connect-flash"); //to show flashes(messages that appear o
 const passport = require("passport"); //for authentication
 const LocalStratergy = require("passport-local"); //local stratergy i.e username & password
 const User = require("./models/user.js"); //user model
+
 
 const listingRouter = require("./routes/listing.js"); //requiring the listings.js file as it contains all the /listings routes
 const reviewRouter = require("./routes/review.js"); //review routes

@@ -3,7 +3,7 @@
     <div class="row mt-3">
         <div class="col-8 offset-2">
             <h3>Create a New Listing</h3> 
-    <form method="POST" action="/listings" class="needs-validation"  novalidate>        
+    <form method="POST" action="/listings" class="needs-validation"  novalidate enctype="multipart/form-data">        
         <!-- novalidate-> turn off default behaviour, needs-validation-> add specific styling for required fields using Bootstrap-->
         <div class="mb-3">
             <label for="title" class="form-label">Title</label>
@@ -18,9 +18,14 @@
             <div class="invalid-feedback">Please enter a short description</div>    <!-- message when input is not given  -->
         </div>
     
-        <div class="mb-3">
+        <!-- <div class="mb-3">
             <label for="image" class="form-label">Image Link</label>
             <input name="listing[image][url]" placeholder="Enter URL/Link" type="text" class="form-control">
+        </div> -->
+
+        <div class="mb-3">
+            <label for="image" class="form-label">Upload Listing Image</label>
+            <input name="listing[image][url]" type="file" class="form-control">
         </div>
 
         <div class="row">
