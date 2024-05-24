@@ -20,7 +20,7 @@ module.exports.isLoggedIn = (req, res, next) => {
       //passport method will check if login or not
       req.session.redirectUrl = req.originalUrl; //save the url from where request came from
       //if there is no path then "/listings" will be the home page
-      req.flash("error", "You must be Loggen in!");
+      req.flash("error", "You must be Logged in!");
       return res.redirect("/login");
     }
     next();
