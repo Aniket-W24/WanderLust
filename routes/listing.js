@@ -33,6 +33,7 @@ router
     // 😂 Update Route
     isLoggedIn,
     isOwner,
+    upload.single("listing[image]"),    //for uploading image
     validateListing,
     wrapAsync(listingController.updateListing)
   )
