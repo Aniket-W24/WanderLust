@@ -41,9 +41,9 @@ async function main() {
   await mongoose.connect(MONGO_URL);
 }
 
-app.get("/", (req, res) => {
-  res.send("Hi, I am root");
-});
+// app.get("/", (req, res) => {
+//   res.send("Hi, I am root");
+// });
 
 const sessionOptions = {
   secret: "mysupersecretcode", //make it a difficult string like path variables
