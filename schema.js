@@ -10,7 +10,8 @@ module.exports.listingSchema = Joi.object({
     image: Joi.object({
       filename : Joi.string().allow("", null),
       url : Joi.string().allow("", null), //allow for empty and null values
-    })
+    }),
+    category : Joi.string(),
   }).required(),
 });
 

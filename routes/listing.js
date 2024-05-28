@@ -18,13 +18,15 @@ router
   .post(
     // 😂 Create Route
     isLoggedIn,
-    upload.single("listing[image]"),    //for uploading image
+    upload.single("listing[image]"), //for uploading image
     validateListing,
     wrapAsync(listingController.createListing)
   );
 
 // 😂 New Route
 router.get("/new", isLoggedIn, listingController.renderNewForm);
+
+router.get("/findByGenre", wrapAsync(listingController.renderByGenre));   //to find listing based on some genre
 
 router
   .route("/:id")
@@ -33,7 +35,7 @@ router
     // 😂 Update Route
     isLoggedIn,
     isOwner,
-    upload.single("listing[image]"),    //for uploading image
+    upload.single("listing[image]"), //for uploading image
     validateListing,
     wrapAsync(listingController.updateListing)
   )

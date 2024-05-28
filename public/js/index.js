@@ -11,3 +11,27 @@ taxSwitch.addEventListener("click", ()=> {
         
     }
 })
+
+// let Trending = document.getElementsByClassName("filter-btn");
+// for(trend of Trending){
+//     trend.addEventListener("click", ()=> {
+//         console.log(trend);
+//     })
+// }
+// Trending.addEventListener("click", ()=> {
+//     console.log(Trending);
+//     // for(trend of Trending){
+//     //     console.log()
+//     // }
+// })
+
+let filterBtns = document.getElementsByClassName("filter-btn");
+
+for (let btn of filterBtns) {
+    btn.addEventListener("click", ((btn) => {
+        return () => {
+            let redirectUrl = `/listings/findByGenre?value=${btn.value}`;   //redirecting to url with given query
+            window.location.href = redirectUrl;
+        };
+    })(btn));
+}
