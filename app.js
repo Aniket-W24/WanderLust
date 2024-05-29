@@ -45,7 +45,8 @@ async function main() {
 }
 
 app.get("/", (req, res) => {
-  res.send("Welcome to WanderLust ! Click on Explore..");
+  // res.send("Welcome to WanderLust ! Click on Explore..");
+  res.redirect("/listings");
 });
 
 const store = MongoStore.create({
