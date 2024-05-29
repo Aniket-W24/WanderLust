@@ -51,14 +51,14 @@ async function main() {
 const store = MongoStore.create({
   mongoUrl: dbUrl,
   crypto: {
-    secret: "mysupersecretcode", //for encyption (SecretCookie etc.)
+    secret: process.env.SECRET, //for encyption (SecretCookie etc.)
   },
   touchAfter: 24 * 3600, //to refresh session (24 hours / in seconds given)
 });
 
 const sessionOptions = {
   store,
-  secret: "mysupersecretcode", //make it a difficult string like path variables
+  secret: process.env.SECRET, //make it a difficult string like path variables
   resave: false,
   saveUninitialized: true,
   cookie: {
