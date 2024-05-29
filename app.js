@@ -20,6 +20,7 @@ const User = require("./models/user.js"); //user model
 const listingRouter = require("./routes/listing.js"); //requiring the listings.js file as it contains all the /listings routes
 const reviewRouter = require("./routes/review.js"); //review routes
 const userRouter = require("./routes/user.js"); //user routes
+const MongoStore = require("connect-mongo"); //for session storage in mongo
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -30,7 +31,6 @@ app.use(express.static(path.join(__dirname, "/public")));
 
 // const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
 const dbUrl = process.env.ATLASDB_URL;
-
 
 main()
   .then(() => {
@@ -48,7 +48,16 @@ async function main() {
 //   res.send("Hi, I am root");
 // });
 
+const store = MongoStore.create({
+  mongoUrl: dbUrl,
+  crypto: {
+    secret: "mysupersecretcode", //for encyption (SecretCookie etc.)
+  },
+  touchAfter: 24 * 3600, //to refresh session (24 hours / in seconds given)
+});
+
 const sessionOptions = {
+  store,
   secret: "mysupersecretcode", //make it a difficult string like path variables
   resave: false,
   saveUninitialized: true,
@@ -58,6 +67,10 @@ const sessionOptions = {
     httpOnly: true, //for security
   },
 };
+
+store.on("error", () => {
+  console.log("Error in MONGO SESSION STORE", err);
+});
 
 app.use(session(sessionOptions)); //to use session -> for creating and using session id's for multiple pages
 app.use(flash()); //to show flash messages on pages
