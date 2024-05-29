@@ -1,4 +1,7 @@
 {
+  "engines" : {
+    "node" : "20.12.1"
+  },
   "name": "48.-code",
   "version": "1.0.0",
   "description": "",
