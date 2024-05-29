@@ -1,7 +1,8 @@
-if(process.env.NODE_ENV != "production"){   //only access if not in production phase
-  require("dotenv").config();   //for accessing environment variables
+if (process.env.NODE_ENV != "production") {
+  //only access if not in production phase
+  require("dotenv").config(); //for accessing environment variables
 }
-// console.log(process.env.CLOUD_NAME);  
+// console.log(process.env.CLOUD_NAME);
 
 const express = require("express");
 const app = express();
@@ -16,7 +17,6 @@ const passport = require("passport"); //for authentication
 const LocalStratergy = require("passport-local"); //local stratergy i.e username & password
 const User = require("./models/user.js"); //user model
 
-
 const listingRouter = require("./routes/listing.js"); //requiring the listings.js file as it contains all the /listings routes
 const reviewRouter = require("./routes/review.js"); //review routes
 const userRouter = require("./routes/user.js"); //user routes
@@ -28,7 +28,9 @@ app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate); //to include ejsMate for boilerPlate
 app.use(express.static(path.join(__dirname, "/public")));
 
-const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
+// const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
+const dbUrl = process.env.ATLASDB_URL;
+
 
 main()
   .then(() => {
@@ -37,8 +39,9 @@ main()
   .catch((err) => {
     console.log(err);
   });
+
 async function main() {
-  await mongoose.connect(MONGO_URL);
+  await mongoose.connect(dbUrl);
 }
 
 // app.get("/", (req, res) => {
