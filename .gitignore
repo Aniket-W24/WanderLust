@@ -2,3 +2,4 @@ node_modules/
 classroom/
 uploads/
 .env
+**/.DS_Store
