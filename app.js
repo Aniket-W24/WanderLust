@@ -44,9 +44,9 @@ async function main() {
   await mongoose.connect(dbUrl);
 }
 
-// app.get("/", (req, res) => {
-//   res.send("Hi, I am root");
-// });
+app.get("/", (req, res) => {
+  res.send("Welcome to WanderLust ! Click on Explore..");
+});
 
 const store = MongoStore.create({
   mongoUrl: dbUrl,
