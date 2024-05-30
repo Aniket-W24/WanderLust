@@ -1,7 +1,7 @@
 <% layout("/layouts/boilerplate") %>
 <body>
     <div class="row mt-3">
-        <div class="col-8 offset-2">
+        <div class="col-8 offset-md-2 .show-mobile">
             <h3>Edit Your Listing</h3>
             <form method="POST" action="/listings/<%= listing._id%>?_method=PUT" class="needs-validation" novalidate enctype="multipart/form-data">
                 <div class="mb-3">
@@ -16,7 +16,7 @@
                     <div class="invalid-feedback">Please enter a short description</div>    <!-- message when input is not given  -->
                 </div>
 
-                <div class="mb-3">
+                <div class="mb-3 edit-img">
                     Original Listing Image<br>
                     <img src="<%= originalImageUrl %>">
                 </div>

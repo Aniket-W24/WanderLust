@@ -150,4 +150,8 @@ body {
         /* font-size: 0.5rem !important; */
         border: none;
    }
+   .edit-img img {
+    width: 20rem !important;
+    height: 12rem!important;
+   }
 } 
