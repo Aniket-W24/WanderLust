@@ -1,7 +1,9 @@
 #filters {
-    display: flex;
+    display: inline-flex;
     flex-wrap: wrap;
     align-items: center;
+    overflow-x: auto;
+    white-space: nowrap;
 }
 .filter, .filter2 {
     text-align: center;
@@ -20,7 +22,7 @@
     display: none;
     margin-top: 2rem;
 }
-@media(max-width : 992px ) {
+/* @media(max-width : 992px ) {
     .dropdown {
         display: inline;
     }
@@ -32,9 +34,11 @@
 @media(max-width : 992px ) {
     .filter {
         display: none;
-    }
-   
-}
+    }  
+} */
+
+
+
 .tax-info {
     display: none;
 }
@@ -44,11 +48,28 @@
     height: 3.25rem;
     padding : 1rem;
     margin-left: 2rem;
-    display: flex;
+    display: inline-flex;
     align-items: center;
 }
 
+/* on phone for filters */
+@media(max-width : 391px) {     
+    #filters {
+        /* display: none; */
+        flex-wrap: nowrap;
+        height: 100px;
+        display: flex;
+    }  
+    .tax-toggle {
+        margin-left : 0.5rem;
+        margin-top : 1rem
+    }
+} 
+
 .filter-btn {
     all: unset;
+}
 
+.nav-link {
+    background-color: white;
 }

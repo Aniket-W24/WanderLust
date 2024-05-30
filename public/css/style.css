@@ -128,3 +128,7 @@ body {
     height:400px; 
     width: 100%; 
 }
+
+.navbar-nav {
+    background-color: white;
+}

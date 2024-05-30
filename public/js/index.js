@@ -30,8 +30,10 @@ let filterBtns = document.getElementsByClassName("filter-btn");
 for (let btn of filterBtns) {
     btn.addEventListener("click", ((btn) => {
         return () => {
+            console.log(btn);
             let redirectUrl = `/listings/findByGenre?value=${btn.value}`;   //redirecting to url with given query
             window.location.href = redirectUrl;
         };
     })(btn));
 }
+

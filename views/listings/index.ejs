@@ -2,58 +2,6 @@
 <!-- used to add the boilerplate  -->
 <link rel="stylesheet" href="/css/index.css">
 <body>
-    
-    <div class="dropdown">
-        <button class="btn btn-danger dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-          Filters
-        </button>
-        <ul class="dropdown-menu">
-            <div class="filter2">
-                <div><i class="fa-solid fa-fire"></i></div>
-                <P>Trending</P>
-            </div>
-            <div class="filter2">
-                <div><i class="fa-solid fa-bed"></i></div>
-                <P>Rooms</P>
-            </div>
-            <div class="filter2">
-                <div><i class="fa-solid fa-mountain-city"></i></div>
-                <P>Iconic Cities</P>
-            </div>
-            <div class="filter2">
-                <div><i class="fa-solid fa-mountain"></i></div>
-                <P>Mountains</P>
-            </div>
-            <div class="filter2">
-                <div><i class="fa-brands fa-fort-awesome"></i></div>
-                <P>Castles</P>
-            </div>
-            <div class="filter2">
-                <div><i class="fa-solid fa-person-swimming"></i></div>
-                <P>Amazing Pools</P>
-            </div>
-            <div class="filter2">
-                <div><i class="fa-solid fa-campground"></i></div>
-                <P>Camping</P>
-            </div>
-            <div class="filter2">
-                <div><i class="fa-solid fa-cow"></i></div>
-                <P>Farms</P>
-            </div>
-            <div class="filter2">
-                <div><i class="fa-regular fa-snowflake"></i></div>
-                <P>Arctic</P>
-            </div>
-            <div class="filter">
-                <div><i class="fa-solid fa-igloo"></i></div>
-                <P>Domes</P>
-            </div>
-            <div class="filter">
-                <div><i class="fa-solid fa-ship"></i></div>
-                <P>Boats</P>
-            </div>
-        </ul>
-      </div>
     <div id="filters">
         <div class="filter">
             <button value="Trending" class="filter-btn"><i class="fa-solid fa-fire"></i></button>
@@ -99,16 +47,13 @@
             <button value="Boats" class="filter-btn"><i class="fa-solid fa-ship"></i></button>
             <P>Boats</P>
         </div>
-        <div class="tax-toggle">
-            <div class="form-check-reverse form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-                <label class="form-check-label" for="flexSwitchCheckDefault">Display total after taxes</label>
-              </div>
-        </div>
     </div>
-
-
-
+    <div class="tax-toggle">
+        <div class="form-check-reverse form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+            <label class="form-check-label" for="flexSwitchCheckDefault">Display total after taxes</label>
+          </div>
+    </div>
     <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
         <% for(listing of allListings){ %>
             <a href="/listings/<%= listing._id %>" class="listing-link">
