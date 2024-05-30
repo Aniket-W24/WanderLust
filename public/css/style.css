@@ -132,3 +132,22 @@ body {
 .navbar-nav {
     background-color: white;
 }
+
+.card-img-top {
+    height: 20rem !important;
+}
+
+@media(max-width : 391px) {     
+   .card-img-top {
+    width: 20rem !important;
+    height: 12rem!important;
+   }
+   .show-mobile{
+        margin-left: 1.5rem;
+        width: 20rem;
+   }
+   .review-card{
+        /* font-size: 0.5rem !important; */
+        border: none;
+   }
+} 
