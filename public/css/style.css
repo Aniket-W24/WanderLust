@@ -154,4 +154,7 @@ body {
     width: 20rem !important;
     height: 12rem!important;
    }
+   .listing-card {
+    margin-left: 1.2rem;
+   }
 } 
