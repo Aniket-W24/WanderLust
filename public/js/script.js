@@ -17,3 +17,14 @@
       }, false)
     })
   })()
+
+// let SearchBtn = document.getElementById("search-button");
+// SearchBtn.addEventListener("click", ()=> {
+//   console.log("Search button was clicked ", SearchBtn);
+//     let Search = document.getElementById("search-input");
+//     console.log("Search input sent", Search.value);
+//     let redirectUrl = `/listings/findByTitle?searchVal=${Search.value}`;   //redirecting to url with given query
+//     console.log(redirectUrl);
+//     window.location.href = redirectUrl;
+// });
+

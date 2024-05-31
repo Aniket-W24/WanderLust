@@ -20,6 +20,15 @@ module.exports.renderByGenre = async (req, res) => {
   res.render("listings/index.ejs", { allListings: listing });
 }
 
+module.exports.renderByTitle = async(req, res)=>{
+  let listing = await Listing.find({ title: req.query.Search });
+  if(listing.length == 0){
+    req.flash("error", "No listing with such name found");
+    return res.redirect("/listings");
+  }
+  res.render("listings/index.ejs", { allListings: listing });
+}
+
 module.exports.showListing = async (req, res) => {
   let { id } = req.params;
   const listing = await Listing.findById(id)

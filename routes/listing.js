@@ -4,6 +4,7 @@ const wrapAsync = require("../utils/wrapAsync.js"); //for async error handle
 const multer = require("multer"); //for file uploads
 const { storage } = require("../cloudinaryConfig.js");
 const upload = multer({ storage }); //destination where file will be saved
+const Listing = require("../models/listing.js");
 
 const {
   isLoggedIn,
@@ -27,6 +28,8 @@ router
 router.get("/new", isLoggedIn, listingController.renderNewForm);
 
 router.get("/findByGenre", wrapAsync(listingController.renderByGenre));   //to find listing based on some genre
+
+router.get("/findByTitle", wrapAsync(listingController.renderByTitle));   //to find listing based on some Title
 
 router
   .route("/:id")
