@@ -137,7 +137,7 @@ body {
     height: 20rem !important;
 }
 
-@media(max-width : 391px) {     
+@media(max-width : 480px) {     
    .card-img-top {
     width: 20rem !important;
     height: 12rem!important;
@@ -155,6 +155,7 @@ body {
     height: 12rem!important;
    }
    .listing-card {
-    margin-left: 1.2rem;
+    /* margin-left: 1.5rem; */
+    margin-left : 5%;
    }
 } 

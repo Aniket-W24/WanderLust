@@ -53,7 +53,7 @@
 }
 
 /* on phone for filters */
-@media(max-width : 391px) {     
+@media(max-width : 480px) {     
     #filters {
         /* display: none; */
         flex-wrap: nowrap;
@@ -70,6 +70,3 @@
     all: unset;
 }
 
-.nav-link {
-    background-color: white;
-}
